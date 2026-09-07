@@ -3,6 +3,8 @@
 
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
 
     <application
         android:name=".FocusDeskApplication"
@@ -15,13 +17,33 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
+            android:launchMode="singleTop"
             android:windowSoftInputMode="adjustResize"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="com.focusdesk.app.action.MAXIMIZE_TIMER" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
+
+        <service
+            android:name=".service.DynamicIslandService"
+            android:foregroundServiceType="mediaPlayback"
+            android:exported="false" />
+
+        <receiver
+            android:name=".service.DynamicIslandActionReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.focusdesk.app.action.TOGGLE_PAUSE" />
+                <action android:name="com.focusdesk.app.action.TOGGLE_MUTE" />
+                <action android:name="com.focusdesk.app.action.STOP_SESSION" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

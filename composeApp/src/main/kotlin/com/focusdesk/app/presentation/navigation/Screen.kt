@@ -1,51 +1,61 @@
 package com.focusdesk.app.presentation.navigation
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.BarChart
-import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.HourglassEmpty
+import androidx.compose.material.icons.automirrored.filled.ShowChart
+import androidx.compose.material.icons.automirrored.outlined.ShowChart
+import androidx.compose.material.icons.filled.Bolt
+import androidx.compose.material.icons.filled.Headphones
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.outlined.BarChart
-import androidx.compose.material.icons.outlined.CheckCircleOutline
-import androidx.compose.material.icons.outlined.HourglassEmpty
+import androidx.compose.material.icons.outlined.Bolt
+import androidx.compose.material.icons.outlined.Headphones
+import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.ui.graphics.vector.ImageVector
 
 sealed class Screen(
     val route: String,
-    val titleResId: Int,
+    val title: String,
     val selectedIcon: ImageVector,
     val unselectedIcon: ImageVector
 ) {
-    data object Timer : Screen(
-        route = "timer_screen",
-        titleResId = com.focusdesk.app.R.string.nav_timer,
-        selectedIcon = Icons.Filled.HourglassEmpty,
-        unselectedIcon = Icons.Outlined.HourglassEmpty
+    data object Home : Screen(
+        route = "home_screen",
+        title = "Home",
+        selectedIcon = Icons.Filled.Home,
+        unselectedIcon = Icons.Outlined.Home
     )
 
-    data object Tasks : Screen(
-        route = "tasks_screen",
-        titleResId = com.focusdesk.app.R.string.nav_tasks,
-        selectedIcon = Icons.Filled.CheckCircle,
-        unselectedIcon = Icons.Outlined.CheckCircleOutline
+    data object Focus : Screen(
+        route = "focus_screen",
+        title = "Focus",
+        selectedIcon = Icons.Filled.Bolt,
+        unselectedIcon = Icons.Outlined.Bolt
     )
 
-    data object Analytics : Screen(
-        route = "analytics_screen",
-        titleResId = com.focusdesk.app.R.string.nav_analytics,
-        selectedIcon = Icons.Filled.BarChart,
-        unselectedIcon = Icons.Outlined.BarChart
+    data object Insights : Screen(
+        route = "insights_screen",
+        title = "Insights",
+        selectedIcon = Icons.AutoMirrored.Filled.ShowChart,
+        unselectedIcon = Icons.AutoMirrored.Outlined.ShowChart
+    )
+
+    data object Sounds : Screen(
+        route = "sounds_screen",
+        title = "Sounds",
+        selectedIcon = Icons.Filled.Headphones,
+        unselectedIcon = Icons.Outlined.Headphones
     )
 
     data object Settings : Screen(
         route = "settings_screen",
-        titleResId = com.focusdesk.app.R.string.nav_settings,
+        title = "Settings",
         selectedIcon = Icons.Filled.Settings,
         unselectedIcon = Icons.Outlined.Settings
     )
 
     companion object {
-        val bottomNavScreens = listOf(Timer, Tasks, Analytics, Settings)
+        val bottomNavScreens: List<Screen>
+            get() = listOf(Home, Focus, Insights, Sounds, Settings)
     }
 }

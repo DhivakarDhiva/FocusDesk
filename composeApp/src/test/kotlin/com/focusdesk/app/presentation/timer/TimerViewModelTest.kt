@@ -50,6 +50,8 @@ class TimerViewModelTest {
         assertEquals(SessionMode.Work, state.session.mode)
         assertEquals(SessionStatus.Idle, state.session.status)
         assertEquals(25 * 60L, state.session.targetDurationSeconds)
+        assertEquals(com.focusdesk.domain.model.Soundscape.None, state.soundscape)
+        assertEquals(false, state.isPlayingAudio)
     }
 
     @Test

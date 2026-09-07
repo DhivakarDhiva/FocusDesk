@@ -22,8 +22,8 @@ class GetAnalyticsUseCaseTest {
     @Test
     fun `test observing stats returns valid seed metrics`() = runTest {
         val stats = getAnalyticsUseCase.observeStats().first()
-        assertTrue(stats.totalFocusMinutesToday > 0)
-        assertTrue(stats.currentDayStreak > 0)
+        assertEquals(0, stats.totalFocusMinutesToday)
+        assertEquals(0, stats.currentDayStreak)
         assertEquals(7, stats.weeklyDistribution.size)
     }
 

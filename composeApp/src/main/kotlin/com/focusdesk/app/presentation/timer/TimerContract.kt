@@ -13,13 +13,17 @@ data class TimerState(
     val session: FocusSession = FocusSession(
         id = "initial",
         mode = SessionMode.Work,
+        taskTitle = "Test",
+        category = "Work",
+        mood = "Calm",
+        soundscape = Soundscape.None,
         targetDurationSeconds = 25 * 60L,
         remainingSeconds = 25 * 60L,
         status = SessionStatus.Idle
     ),
     val soundscape: Soundscape = Soundscape.None,
     val isPlayingAudio: Boolean = false,
-    val soundVolume: Float = 0.5f,
+    val soundVolume: Float = 0.65f,
     val isResetDialogOpen: Boolean = false,
     val isTaskSelectorOpen: Boolean = false,
     val availableTasks: List<TaskItem> = emptyList()
@@ -38,6 +42,19 @@ sealed interface TimerIntent : MviIntent {
     data object OpenTaskSelector : TimerIntent
     data object DismissTaskSelector : TimerIntent
     data object InternalTick : TimerIntent
+    data class StartCustomSession(
+        val taskTitle: String,
+        val category: String,
+        val mood: String,
+        val durationMinutes: Int,
+        val soundscape: Soundscape
+    ) : TimerIntent
+    data object AddFiveMinutes : TimerIntent
+    data object EndSessionEarly : TimerIntent
+    data class SetSoundVolume(val volume: Float) : TimerIntent
+    data class PlaySound(val soundscape: Soundscape) : TimerIntent
+    data object StopAudio : TimerIntent
+    data object DismissCompletedSession : TimerIntent
 }
 
 sealed interface TimerEffect : MviEffect {

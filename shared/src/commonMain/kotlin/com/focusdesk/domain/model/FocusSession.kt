@@ -15,9 +15,13 @@ enum class SessionStatus {
 
 data class FocusSession(
     val id: String,
-    val mode: SessionMode,
-    val targetDurationSeconds: Long,
-    val remainingSeconds: Long,
+    val mode: SessionMode = SessionMode.Work,
+    val taskTitle: String = "Test",
+    val category: String = "Work",
+    val mood: String = "Calm",
+    val soundscape: Soundscape = Soundscape.None,
+    val targetDurationSeconds: Long = 1500L,
+    val remainingSeconds: Long = 1500L,
     val status: SessionStatus = SessionStatus.Idle,
     val currentRound: Int = 1,
     val totalRounds: Int = 4,

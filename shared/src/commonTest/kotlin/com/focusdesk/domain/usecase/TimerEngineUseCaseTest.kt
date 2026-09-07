@@ -72,7 +72,8 @@ class TimerEngineUseCaseTest {
     }
 
     @Test
-    fun `test resetting timer restores initial duration`() = runTest {
+    fun `test resetting timer restores initial duration and resets soundscape`() = runTest {
+        timerEngineUseCase.updateSoundscape(com.focusdesk.domain.model.Soundscape.Rain)
         timerEngineUseCase.startTimer()
         timerEngineUseCase.tick()
         timerEngineUseCase.resetTimer()
@@ -80,5 +81,16 @@ class TimerEngineUseCaseTest {
         val session = focusRepository.getCurrentSession()
         assertEquals(SessionStatus.Idle, session.status)
         assertEquals(25 * 60L, session.remainingSeconds)
+        assertEquals(com.focusdesk.domain.model.Soundscape.None, session.soundscape)
+    }
+
+    @Test
+    fun `test endSessionEarly sets status to Completed and resets soundscape`() = runTest {
+        timerEngineUseCase.updateSoundscape(com.focusdesk.domain.model.Soundscape.Ocean)
+        timerEngineUseCase.startTimer()
+        val completed = timerEngineUseCase.endSessionEarly()
+
+        assertEquals(SessionStatus.Completed, completed.status)
+        assertEquals(com.focusdesk.domain.model.Soundscape.None, completed.soundscape)
     }
 }

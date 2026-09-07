@@ -1,8 +1,8 @@
 package com.focusdesk.core.platform
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
-import android.os.CombinedVibration
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
@@ -19,6 +19,7 @@ actual class HapticEngine(private val context: Context) {
         }
     }
 
+    @SuppressLint("MissingPermission")
     actual fun perform(type: HapticFeedbackType) {
         val vib = vibrator ?: return
         if (!vib.hasVibrator()) return

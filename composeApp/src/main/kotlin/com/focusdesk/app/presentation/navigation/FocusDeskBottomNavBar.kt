@@ -1,88 +1,166 @@
 package com.focusdesk.app.presentation.navigation
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
-import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.compose.currentBackStackEntryAsState
-import com.focusdesk.app.presentation.designsystem.FocusPrimary
-import com.focusdesk.app.presentation.designsystem.SwiftUiMotion
+import com.focusdesk.app.presentation.designsystem.LocalFocusDeskColors
+import com.focusdesk.app.presentation.designsystem.LocalHapticEngine
+import com.focusdesk.core.platform.HapticFeedbackType
 
 @Composable
 fun FocusDeskBottomNavBar(
-    navController: NavController,
-    modifier: Modifier = Modifier
+    selectedScreen: Screen,
+    onScreenSelected: (Screen) -> Unit,
+    modifier: Modifier = Modifier,
+    isVisible: Boolean = true
 ) {
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry?.destination?.route
+    val themeColors = LocalFocusDeskColors.current
+    val hapticEngine = LocalHapticEngine.current
+    val screens = Screen.bottomNavScreens
 
-    NavigationBar(
-        modifier = modifier,
-        containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.92f),
-        tonalElevation = 8.dp
+    AnimatedVisibility(
+        visible = isVisible,
+        enter = slideInVertically(
+            initialOffsetY = { it },
+            animationSpec = spring(dampingRatio = 0.8f, stiffness = 350f)
+        ) + fadeIn(),
+        exit = slideOutVertically(
+            targetOffsetY = { it },
+            animationSpec = spring(dampingRatio = 0.8f, stiffness = 350f)
+        ) + fadeOut(),
+        modifier = modifier
     ) {
-        Screen.bottomNavScreens.forEach { screen ->
-            val isSelected = currentRoute == screen.route
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .navigationBarsPadding()
+                .padding(horizontal = 20.dp, vertical = 10.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(64.dp)
+                    .shadow(
+                        elevation = 8.dp,
+                        shape = RoundedCornerShape(32.dp),
+                        ambientColor = Color.Black.copy(alpha = 0.06f),
+                        spotColor = Color.Black.copy(alpha = 0.08f)
+                    )
+                    .clip(RoundedCornerShape(32.dp))
+                    .background(themeColors.navBarBackground)
+                    .border(
+                        width = 1.dp,
+                        color = themeColors.cardBorder,
+                        shape = RoundedCornerShape(32.dp)
+                    )
+                    .padding(horizontal = 6.dp, vertical = 4.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceEvenly,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    screens.forEach { screen ->
+                        val isSelected = selectedScreen == screen
 
-            val iconScale by animateFloatAsState(
-                targetValue = if (isSelected) 1.15f else 1.0f,
-                animationSpec = SwiftUiMotion.bouncy(),
-                label = "nav_icon_scale"
-            )
+                        val pillBgColor by animateColorAsState(
+                            targetValue = if (isSelected) themeColors.navBarSelectedPill else Color.Transparent,
+                            animationSpec = spring(dampingRatio = 0.8f, stiffness = 400f),
+                            label = "tab_pill_bg"
+                        )
 
-            NavigationBarItem(
-                selected = isSelected,
-                onClick = {
-                    if (currentRoute != screen.route) {
-                        navController.navigate(screen.route) {
-                            popUpTo(navController.graph.findStartDestination().id) {
-                                saveState = true
+                        val contentColor by animateColorAsState(
+                            targetValue = if (isSelected) themeColors.primary else Color(0xFF1E261D),
+                            animationSpec = spring(dampingRatio = 0.8f, stiffness = 400f),
+                            label = "tab_content_color"
+                        )
+
+                        val iconScale by animateFloatAsState(
+                            targetValue = if (isSelected) 1.15f else 1.0f,
+                            animationSpec = spring(dampingRatio = 0.52f, stiffness = 420f),
+                            label = "tab_icon_scale"
+                        )
+
+                        Box(
+                            modifier = Modifier
+                                .height(54.dp)
+                                .clip(RoundedCornerShape(27.dp))
+                                .background(pillBgColor)
+                                .clickable(
+                                    interactionSource = remember { MutableInteractionSource() },
+                                    indication = null
+                                ) {
+                                    if (!isSelected) {
+                                        hapticEngine.perform(HapticFeedbackType.Light)
+                                        onScreenSelected(screen)
+                                    }
+                                }
+                                .padding(horizontal = if (isSelected) 18.dp else 12.dp, vertical = 4.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Column(
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.Center
+                            ) {
+                                Icon(
+                                    imageVector = if (isSelected) screen.selectedIcon else screen.unselectedIcon,
+                                    contentDescription = screen.title,
+                                    tint = contentColor,
+                                    modifier = Modifier
+                                        .size(22.dp)
+                                        .graphicsLayer {
+                                            scaleX = iconScale
+                                            scaleY = iconScale
+                                        }
+                                )
+                                Text(
+                                    text = screen.title,
+                                    color = contentColor,
+                                    fontSize = 11.sp,
+                                    fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Medium,
+                                    letterSpacing = (-0.1).sp
+                                )
                             }
-                            launchSingleTop = true
-                            restoreState = true
                         }
                     }
-                },
-                icon = {
-                    Icon(
-                        imageVector = if (isSelected) screen.selectedIcon else screen.unselectedIcon,
-                        contentDescription = stringResource(screen.titleResId),
-                        modifier = Modifier
-                            .scale(iconScale)
-                            .size(24.dp)
-                    )
-                },
-                label = {
-                    Text(
-                        text = stringResource(screen.titleResId),
-                        style = MaterialTheme.typography.labelSmall.copy(
-                            fontSize = 11.sp,
-                            fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
-                        )
-                    )
-                },
-                colors = NavigationBarItemDefaults.colors(
-                    selectedIconColor = FocusPrimary,
-                    selectedTextColor = FocusPrimary,
-                    indicatorColor = FocusPrimary.copy(alpha = 0.12f),
-                    unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                    unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            )
+                }
+            }
         }
     }
 }

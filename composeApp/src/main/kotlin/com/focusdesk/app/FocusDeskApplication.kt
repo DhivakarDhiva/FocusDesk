@@ -2,7 +2,7 @@ package com.focusdesk.app
 
 import android.app.Application
 import com.focusdesk.app.di.appModule
-import com.focusdesk.core.di.sharedModule
+import com.focusdesk.core.di.domainModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -16,7 +16,7 @@ class FocusDeskApplication : Application() {
         startKoin {
             androidLogger(Level.DEBUG)
             androidContext(this@FocusDeskApplication)
-            modules(sharedModule, appModule)
+            modules(domainModule, appModule)
         }
     }
 }

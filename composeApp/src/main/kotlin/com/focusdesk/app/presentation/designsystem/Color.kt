@@ -1,97 +1,139 @@
 package com.focusdesk.app.presentation.designsystem
 
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.lightColorScheme
-import androidx.compose.ui.graphics.Brush
+import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
+import com.focusdesk.domain.model.AppTheme
 
-// Core Brand Palette
-val FocusPrimary = Color(0xFF6366F1)
-val FocusPrimaryDark = Color(0xFF4F46E5)
-val FocusSecondary = Color(0xFF06B6D4)
-val FocusTertiary = Color(0xFF10B981)
-
-val FocusBreak = Color(0xFF10B981)
-val FocusLongBreak = Color(0xFF3B82F6)
-val FocusWork = Color(0xFF6366F1)
-
-// Dark Theme Surfaces
-val DarkBackground = Color(0xFF0B0F19)
-val DarkSurface = Color(0xFF111827)
-val DarkSurfaceVariant = Color(0xFF1F2937)
-val DarkBorder = Color(0xFF374151)
-val DarkTextPrimary = Color(0xFFF9FAFB)
-val DarkTextSecondary = Color(0xFF9CA3AF)
-
-// Light Theme Surfaces
-val LightBackground = Color(0xFFF8FAFC)
-val LightSurface = Color(0xFFFFFFFF)
-val LightSurfaceVariant = Color(0xFFF1F5F9)
-val LightBorder = Color(0xFFE2E8F0)
-val LightTextPrimary = Color(0xFF0F172A)
-val LightTextSecondary = Color(0xFF64748B)
-
-// Status / Priority Colors
-val PriorityUrgent = Color(0xFFEF4444)
-val PriorityHigh = Color(0xFFF97316)
-val PriorityMedium = Color(0xFFEAB308)
-val PriorityLow = Color(0xFF3B82F6)
-
-// Gradient Brushes
-val WorkGradient = Brush.linearGradient(
-    listOf(Color(0xFF6366F1), Color(0xFF8B5CF6))
+@Immutable
+data class FocusDeskThemeColors(
+    val theme: AppTheme,
+    val background: Color,
+    val cardBackground: Color,
+    val cardBorder: Color,
+    val primary: Color,
+    val primaryAccent: Color,
+    val onPrimaryAccent: Color,
+    val darkCardBackground: Color,
+    val darkCardGlow: Color,
+    val textPrimary: Color,
+    val textSecondary: Color,
+    val textMuted: Color,
+    val navBarBackground: Color,
+    val navBarSelectedPill: Color,
+    val divider: Color
 )
 
-val ShortBreakGradient = Brush.linearGradient(
-    listOf(Color(0xFF10B981), Color(0xFF06B6D4))
+// 1. Default Focus Theme (Forest Olive & Vibrant Lime)
+val DefaultFocusColors = FocusDeskThemeColors(
+    theme = AppTheme.DefaultFocus,
+    background = Color(0xFFF7F6F1),
+    cardBackground = Color(0xFFFFFFFF),
+    cardBorder = Color(0xFFEBEBE4),
+    primary = Color(0xFF4A683F),
+    primaryAccent = Color(0xFFD4F384),
+    onPrimaryAccent = Color(0xFF1E2D1A),
+    darkCardBackground = Color(0xFF16251C),
+    darkCardGlow = Color(0x33A3D944),
+    textPrimary = Color(0xFF1A2219),
+    textSecondary = Color(0xFF6B7569),
+    textMuted = Color(0xFF9BA499),
+    navBarBackground = Color(0xFFFFFFFF),
+    navBarSelectedPill = Color(0xFFE3ECD8),
+    divider = Color(0xFFECECE6)
 )
 
-val LongBreakGradient = Brush.linearGradient(
-    listOf(Color(0xFF3B82F6), Color(0xFF6366F1))
+// 2. Paper Studio Theme (Warm Craft Paper & Terracotta)
+val PaperStudioColors = FocusDeskThemeColors(
+    theme = AppTheme.PaperStudio,
+    background = Color(0xFFF5EBE1),
+    cardBackground = Color(0xFFFFFDF9),
+    cardBorder = Color(0xFFEDE3D7),
+    primary = Color(0xFF8E532B),
+    primaryAccent = Color(0xFFE5A169),
+    onPrimaryAccent = Color(0xFF2C190F),
+    darkCardBackground = Color(0xFF291D16),
+    darkCardGlow = Color(0x33D98236),
+    textPrimary = Color(0xFF261D17),
+    textSecondary = Color(0xFF7A6D63),
+    textMuted = Color(0xFFA5988F),
+    navBarBackground = Color(0xFFFFFDF9),
+    navBarSelectedPill = Color(0xFFECE0D2),
+    divider = Color(0xFFEAE0D4)
 )
 
-val GlassBorderGradient = Brush.linearGradient(
-    listOf(Color(0x33FFFFFF), Color(0x0DFFFFFF))
+// 3. Low Tide Theme (Sage Mint & Deep Sea Teal)
+val LowTideColors = FocusDeskThemeColors(
+    theme = AppTheme.LowTide,
+    background = Color(0xFFE9F1ED),
+    cardBackground = Color(0xFFF8FCFA),
+    cardBorder = Color(0xFFDFE9E4),
+    primary = Color(0xFF2B5C56),
+    primaryAccent = Color(0xFF9EE0D4),
+    onPrimaryAccent = Color(0xFF102826),
+    darkCardBackground = Color(0xFF142927),
+    darkCardGlow = Color(0x333EA296),
+    textPrimary = Color(0xFF152523),
+    textSecondary = Color(0xFF667875),
+    textMuted = Color(0xFF92A3A0),
+    navBarBackground = Color(0xFFF8FCFA),
+    navBarSelectedPill = Color(0xFFD6E8E3),
+    divider = Color(0xFFDEE9E5)
 )
 
-val DarkColorScheme = darkColorScheme(
-    primary = FocusPrimary,
-    onPrimary = Color.White,
-    primaryContainer = Color(0xFF312E81),
-    onPrimaryContainer = Color(0xFFE0E7FF),
-    secondary = FocusSecondary,
-    onSecondary = Color.Black,
-    secondaryContainer = Color(0xFF164E63),
-    onSecondaryContainer = Color(0xFFCFFAFE),
-    tertiary = FocusTertiary,
-    background = DarkBackground,
-    onBackground = DarkTextPrimary,
-    surface = DarkSurface,
-    onSurface = DarkTextPrimary,
-    surfaceVariant = DarkSurfaceVariant,
-    onSurfaceVariant = DarkTextSecondary,
-    outline = DarkBorder,
-    error = PriorityUrgent,
-    onError = Color.White
+// 4. Last Light Theme (Peach Blush & Terracotta Coral)
+val LastLightColors = FocusDeskThemeColors(
+    theme = AppTheme.LastLight,
+    background = Color(0xFFF8EFE9),
+    cardBackground = Color(0xFFFFFBF9),
+    cardBorder = Color(0xFFF0E4DE),
+    primary = Color(0xFFB55739),
+    primaryAccent = Color(0xFFF5AC95),
+    onPrimaryAccent = Color(0xFF33160D),
+    darkCardBackground = Color(0xFF2C1D1A),
+    darkCardGlow = Color(0x33E07250),
+    textPrimary = Color(0xFF281C18),
+    textSecondary = Color(0xFF7C6C66),
+    textMuted = Color(0xFFA69791),
+    navBarBackground = Color(0xFFFFFBF9),
+    navBarSelectedPill = Color(0xFFEEDCD4),
+    divider = Color(0xFFEFE2DC)
 )
 
-val LightColorScheme = lightColorScheme(
-    primary = FocusPrimaryDark,
-    onPrimary = Color.White,
-    primaryContainer = Color(0xFFE0E7FF),
-    onPrimaryContainer = Color(0xFF312E81),
-    secondary = FocusSecondary,
-    onSecondary = Color.White,
-    secondaryContainer = Color(0xFFCFFAFE),
-    onSecondaryContainer = Color(0xFF164E63),
-    tertiary = FocusTertiary,
-    background = LightBackground,
-    onBackground = LightTextPrimary,
-    surface = LightSurface,
-    onSurface = LightTextPrimary,
-    surfaceVariant = LightSurfaceVariant,
-    onSurfaceVariant = LightTextSecondary,
-    outline = LightBorder,
-    error = PriorityUrgent,
-    onError = Color.White
+// 5. Night Bloom Theme (Soft Lavender & Deep Violet)
+val NightBloomColors = FocusDeskThemeColors(
+    theme = AppTheme.NightBloom,
+    background = Color(0xFFF1EEF6),
+    cardBackground = Color(0xFFFBFAFD),
+    cardBorder = Color(0xFFE7E2EF),
+    primary = Color(0xFF5D4786),
+    primaryAccent = Color(0xFFC0A6EB),
+    onPrimaryAccent = Color(0xFF1D142E),
+    darkCardBackground = Color(0xFF211A2C),
+    darkCardGlow = Color(0x338965C9),
+    textPrimary = Color(0xFF1F1929),
+    textSecondary = Color(0xFF726A7E),
+    textMuted = Color(0xFF9E95A8),
+    navBarBackground = Color(0xFFFBFAFD),
+    navBarSelectedPill = Color(0xFFE3DCED),
+    divider = Color(0xFFE8E2F0)
 )
+
+fun getThemeColors(theme: AppTheme): FocusDeskThemeColors = when (theme) {
+    AppTheme.DefaultFocus -> DefaultFocusColors
+    AppTheme.PaperStudio -> PaperStudioColors
+    AppTheme.LowTide -> LowTideColors
+    AppTheme.LastLight -> LastLightColors
+    AppTheme.NightBloom -> NightBloomColors
+}
+
+// Backward compatibility bindings for existing references
+val InkCanvas = DefaultFocusColors.background
+val LumenAction = DefaultFocusColors.primaryAccent
+val EvergreenHero = DefaultFocusColors.darkCardBackground
+val WarmStreak = Color(0xFFF2B68D)
+val ResetBreak = Color(0xFF9DD9D0)
+val LightCanvas = DefaultFocusColors.background
+val LightSurface = DefaultFocusColors.cardBackground
+val LightTextPrimary = DefaultFocusColors.textPrimary
+val LightTextSecondary = DefaultFocusColors.textSecondary
+val PriorityUrgent = Color(0xFFE55757)
