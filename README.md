@@ -6,7 +6,6 @@
 ![Compose](https://img.shields.io/badge/Jetpack%20Compose-2025.01.00-4285F4.svg?style=for-the-badge&logo=jetpackcompose&logoColor=white)
 ![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20iOS%20Ready-3DDC84.svg?style=for-the-badge&logo=android&logoColor=white)
 ![Architecture](https://img.shields.io/badge/Architecture-Clean%20%2B%20MVI-FF6F00.svg?style=for-the-badge)
-![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=for-the-badge)
 
 **A modern, production-grade productivity & deep-work desk companion built with Kotlin Multiplatform (KMP), Jetpack Compose, Room Database, and native Dynamic Island / Live Activity integration.**
 
