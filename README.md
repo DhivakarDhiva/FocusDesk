@@ -51,6 +51,19 @@
 
 ---
 
+## 📱 Screenshots
+
+<p align="center">
+  <img src="screenshots/onboard.jpeg" width="250">
+  <img src="screenshots/home.jpeg" width="250">
+  <img src="screenshots/sessionTimer.jpeg" width="250">
+  <img src="screenshots/focus.jpeg" width="250">
+  <img src="screenshots/insights.jpeg" width="250">
+  <img src="screenshots/sounds.jpeg" width="250">
+</p>
+
+---
+
 ## 🏛️ Clean Architecture & MVI
 
 The project adheres strictly to **Clean Architecture** with a **Unidirectional Data Flow (MVI)** pattern across layers:
