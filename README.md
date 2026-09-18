@@ -51,6 +51,12 @@
 
 ---
 
+## 🎥 App Demo
+
+https://github.com/user-attachments/assets/da78b522-297b-4b45-8cd9-103bde1c3ae4
+
+---
+
 ## 📱 Screenshots
 
 <p align="center">
