@@ -1,0 +1,790 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>FocusDesk — Developer & Architecture Manual</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+  @page {
+    size: A4 portrait;
+    margin: 18mm 14mm 18mm 14mm;
+    @bottom-right {
+      content: counter(page);
+    }
+  }
+
+  * {
+    box-sizing: border-box;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: #1a2219;
+    background-color: #ffffff;
+    line-height: 1.6;
+    font-size: 13.5px;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Cover Page */
+  .cover-page {
+    page-break-after: always;
+    min-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 40px 20px;
+    border-bottom: 2px solid #e0e6db;
+  }
+
+  .cover-badge-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .badge-primary { background: #4a683f; color: #ffffff; }
+  .badge-accent { background: #d4f384; color: #1e2d1a; }
+  .badge-dark { background: #16251c; color: #ffffff; }
+  .badge-outline { background: #f4f6f2; color: #4a683f; border: 1px solid #d0dccb; }
+
+  .cover-title {
+    font-size: 38px;
+    font-weight: 800;
+    color: #16251c;
+    line-height: 1.15;
+    margin: 0 0 12px 0;
+  }
+
+  .cover-subtitle {
+    font-size: 18px;
+    font-weight: 400;
+    color: #4a683f;
+    margin: 0 0 32px 0;
+    line-height: 1.4;
+  }
+
+  .cover-card {
+    background: #f8faf6;
+    border: 1px solid #e2e8de;
+    border-radius: 12px;
+    padding: 24px;
+    margin-top: 24px;
+  }
+
+  .meta-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    font-size: 12.5px;
+  }
+
+  .meta-item strong {
+    display: block;
+    color: #556250;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  /* Headings & Structure */
+  h1 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #16251c;
+    border-bottom: 2px solid #4a683f;
+    padding-bottom: 6px;
+    margin-top: 36px;
+    margin-bottom: 16px;
+    page-break-after: avoid;
+  }
+
+  h2 {
+    font-size: 17px;
+    font-weight: 700;
+    color: #2e4327;
+    margin-top: 26px;
+    margin-bottom: 12px;
+    page-break-after: avoid;
+  }
+
+  h3 {
+    font-size: 14.5px;
+    font-weight: 600;
+    color: #16251c;
+    margin-top: 20px;
+    margin-bottom: 8px;
+    page-break-after: avoid;
+  }
+
+  p {
+    margin: 0 0 12px 0;
+  }
+
+  /* Code & Syntax */
+  code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    background: #f0f4ed;
+    color: #2b5c56;
+    padding: 2px 5px;
+    border-radius: 4px;
+  }
+
+  pre {
+    background: #151b17;
+    color: #e3ece0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11.5px;
+    line-height: 1.45;
+    padding: 14px 16px;
+    border-radius: 8px;
+    overflow-x: auto;
+    border: 1px solid #2d382f;
+    margin: 12px 0 18px 0;
+    page-break-inside: avoid;
+  }
+
+  pre code {
+    background: transparent;
+    color: inherit;
+    padding: 0;
+  }
+
+  /* Tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 14px 0 20px 0;
+    font-size: 12.5px;
+    page-break-inside: avoid;
+  }
+
+  th {
+    background: #eef3ec;
+    color: #1a2718;
+    text-align: left;
+    padding: 9px 12px;
+    font-weight: 600;
+    border: 1px solid #d8e2d4;
+  }
+
+  td {
+    padding: 8px 12px;
+    border: 1px solid #e3ebe0;
+    vertical-align: top;
+  }
+
+  tr:nth-child(even) td {
+    background: #fafbf9;
+  }
+
+  /* Callouts & Alert Boxes */
+  .callout {
+    border-left: 4px solid #4a683f;
+    background: #f6f9f4;
+    padding: 12px 16px;
+    border-radius: 0 8px 8px 0;
+    margin: 16px 0;
+    font-size: 13px;
+    page-break-inside: avoid;
+  }
+
+  .callout-warning {
+    border-left-color: #d97706;
+    background: #fffbeb;
+  }
+
+  .callout-tip {
+    border-left-color: #2563eb;
+    background: #eff6ff;
+  }
+
+  .callout strong {
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  /* Architecture Diagram Box */
+  .arch-box {
+    background: #19231c;
+    color: #d8ecd1;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    padding: 16px;
+    border-radius: 8px;
+    line-height: 1.4;
+    white-space: pre;
+    overflow-x: auto;
+    border: 1px solid #2c3e31;
+    margin: 14px 0;
+    page-break-inside: avoid;
+  }
+
+  .page-break {
+    page-break-before: always;
+  }
+
+  /* Table of Contents */
+  .toc-list {
+    list-style-type: none;
+    padding-left: 0;
+    font-size: 13px;
+    line-height: 1.8;
+  }
+
+  .toc-list li {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px dotted #ccc;
+    padding: 3px 0;
+  }
+
+  .toc-list a {
+    text-decoration: none;
+    color: #16251c;
+    font-weight: 500;
+  }
+
+  .toc-list span.page-num {
+    color: #5d6e57;
+    font-weight: 600;
+  }
+</style>
+</head>
+<body>
+
+<!-- COVER PAGE -->
+<div class="cover-page">
+  <div class="cover-badge-row">
+    <span class="badge badge-primary">Official Documentation</span>
+    <span class="badge badge-accent">Kotlin Multiplatform</span>
+    <span class="badge badge-dark">Jetpack Compose</span>
+    <span class="badge badge-outline">Room 2.6.1</span>
+  </div>
+  <h1 class="cover-title">FocusDesk</h1>
+  <div class="cover-subtitle">Comprehensive Developer & Architecture Manual</div>
+  <p style="font-size: 14px; color: #444; max-width: 650px;">
+    An exhaustive, production-grade reference guide engineered for future maintainers, core engineers, and cross-platform architects. Details every layer, function call chain, state transition, procedural audio formula, and Android system integration.
+  </p>
+
+  <div class="cover-card">
+    <div class="meta-grid">
+      <div class="meta-item">
+        <strong>Architectural Style</strong>
+        Clean Architecture (Domain/Data/Presentation) + MVI
+      </div>
+      <div class="meta-item">
+        <strong>Target Platforms</strong>
+        Android SDK 26–35 &amp; KMP iOS Framework Ready
+      </div>
+      <div class="meta-item">
+        <strong>Language &amp; Compiler</strong>
+        Kotlin 2.1.0 • Compose BOM 2025.01.00
+      </div>
+      <div class="meta-item">
+        <strong>Local Persistence</strong>
+        SQLite Room 2.6.1 + KSP Code Generation
+      </div>
+      <div class="meta-item">
+        <strong>Audio Synthesis</strong>
+        Real-Time 44.1 kHz PCM Procedural (Zero Assets)
+      </div>
+      <div class="meta-item">
+        <strong>Status Bar Integration</strong>
+        MediaSession &amp; Notification.MediaStyle Dynamic Island
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 1 -->
+<h1>1. Executive Overview & Philosophy</h1>
+<p>
+  <strong>FocusDesk</strong> is a modern, production-grade productivity and deep-work companion engineered with <strong>Kotlin Multiplatform (KMP)</strong>, <strong>Jetpack Compose</strong>, and <strong>Room Database</strong>. It departs from conventional Pomodoro apps by eliminating static asset loops and third-party UI widgets in favor of native platform integration:
+</p>
+<ul>
+  <li><strong>System-Native Dynamic Island</strong>: Pins an active foreground <code>MediaSession</code> with <code>Notification.MediaStyle</code> to project live countdowns directly into the camera punch-hole island and status bar on modern Android devices (ColorOS/OxygenOS Aqua Dynamics, Xiaomi HyperOS, Samsung One UI, and Android 14/15 Live Notifications).</li>
+  <li><strong>Procedural Ambient Audio Synthesizer</strong>: Rather than bundling 60MB of pre-recorded audio files that suffer from audible loop seams, FocusDesk synthesizes stereo rain, Brownian noise, pink noise, coffee shop rumble, and forest birdsong mathematically at 44,100 Hz in real-time.</li>
+  <li><strong>Offline-First Room Persistence</strong>: All focus sessions, user settings, streak counters, and task priorities are saved locally in an embedded SQLite Room database with reactive Kotlin <code>Flow</code> queries and automatic schema seeding.</li>
+  <li><strong>Tactile Spring Physics Design System</strong>: Bespoke glassmorphism, 5 curated theme palettes, and spring curves calibrated 1:1 against Apple SwiftUI <code>.snappy</code>, <code>.smooth</code>, and <code>.bouncy</code> physics.</li>
+</ul>
+
+<!-- SECTION 2 -->
+<div class="page-break"></div>
+<h1>2. Why the Folder Structure is Laid Out Like This</h1>
+<p>
+  The project is divided into two distinct Gradle modules: <code>:shared</code> and <code>:composeApp</code>. This structure strictly enforces the <strong>Dependency Inversion Principle</strong> and allows cross-platform portability.
+</p>
+
+<div class="arch-box">FocusDesk/
+├── shared/                                    # Pure KMP Core Module (No Android UI dependencies)
+│   └── src/
+│       ├── commonMain/kotlin/com/focusdesk/   # Pure Kotlin (Runs on JVM, Android, and iOS)
+│       │   ├── core/
+│       │   │   ├── di/SharedModule.kt         # Platform-agnostic Koin bindings
+│       │   │   ├── mvi/                       # Base MVI framework (MviState, MviIntent, MviViewModel)
+│       │   │   └── platform/                  # 'expect' declarations (AmbientAudioEngine, HapticEngine)
+│       │   ├── data/repository/               # In-memory repository implementations (for unit tests & iOS)
+│       │   └── domain/
+│       │       ├── model/                     # Pure business entities (FocusSession, TaskItem, UserSettings)
+│       │       ├── repository/                # Repository interfaces (FocusRepository, TaskRepository)
+│       │       └── usecase/                   # Use cases (TimerEngineUseCase, ManageTasksUseCase, GetAnalytics)
+│       ├── androidMain/kotlin/com/focusdesk/  # Android 'actual' hardware bridges (AudioTrack, Vibrator)
+│       └── iosMain/kotlin/com/focusdesk/      # iOS 'actual' hardware bridges (AVAudioEngine, CoreHaptics)
+│
+└── composeApp/                                # Android Application Module
+    └── src/main/
+        ├── AndroidManifest.xml                # Foreground service, permissions, & broadcast receivers
+        └── kotlin/com/focusdesk/app/
+            ├── FocusDeskApplication.kt        # Application subclass configuring Koin dependency graph
+            ├── MainActivity.kt                # Root activity & navigation backstack coordinator
+            ├── data/                          # Android Local Storage Layer
+            │   ├── local/
+            │   │   ├── FocusDeskDatabase.kt   # Room Database class with singleton & prepopulation callback
+            │   │   ├── dao/                   # FocusSessionDao, TaskDao, UserSettingsDao
+            │   │   └── entity/                # Room entities & toDomain() / toEntity() mappers
+            │   └── repository/                # Room implementations of domain repositories
+            ├── di/AppModule.kt                # Android Koin module (Room DB, DAOs, ViewModels, AudioEngine)
+            ├── presentation/                  # Jetpack Compose UI Layer (grouped by feature)
+            │   ├── analytics/                 # Insights screen, charts, session history
+            │   ├── designsystem/              # Themes, Color palettes, Typography, Shapes, Motion, Sliders
+            │   ├── focus/                     # Quick-start cards & new session bottom sheet
+            │   ├── home/                      # Dashboard, streak counter, daily progress ring
+            │   ├── navigation/                # Bottom navigation bar & Screen routes
+            │   ├── onboarding/                # First-run guided interactive setup
+            │   ├── settings/                  # Timer interval sliders, sounds, theme picker
+            │   ├── sounds/                    # Ambient soundscapes & audio mixer
+            │   └── timer/                     # Pomodoro timer, circular progress, complete screen
+            └── service/                       # Android System Services
+                ├── DynamicIslandService.kt    # Foreground service with MediaSession & Notification.MediaStyle
+                └── DynamicIslandActionReceiver.kt # Broadcast receiver for notification remote actions</div>
+
+<h3>2.1 Key Design Questions Answered</h3>
+<table>
+  <tr>
+    <th style="width: 30%;">Design Decision</th>
+    <th>Why It Is Structured This Way</th>
+  </tr>
+  <tr>
+    <td><strong>Why is <code>FocusRepository</code> in <code>shared</code> while <code>RoomFocusRepository</code> is in <code>composeApp</code>?</strong></td>
+    <td>
+      Adheres to Clean Architecture's <strong>Dependency Inversion</strong>. The Domain layer defines the business contract (<code>FocusRepository</code>). The concrete implementation depends on Android SQLite Room APIs, which belong in the Android-specific <code>composeApp</code> module.
+    </td>
+  </tr>
+  <tr>
+    <td><strong>Why use <code>expect</code>/<code>actual</code> for Audio and Haptics?</strong></td>
+    <td>
+      Audio output (<code>AudioTrack</code> on Android vs <code>AVAudioEngine</code> on iOS) and Haptics (<code>VibratorManager</code> on Android vs <code>UIFeedbackGenerator</code> on iOS) require low-level platform APIs. Declaring <code>expect class AmbientAudioEngine</code> allows the shared Domain layer to trigger audio without caring what OS is underneath.
+    </td>
+  </tr>
+  <tr>
+    <td><strong>Why separate <code>presentation/</code> subfolders by feature instead of by layer?</strong></td>
+    <td>
+      <strong>Feature-First Packaging</strong> ensures high cohesion. All components relating to the timer (<code>TimerScreen</code>, <code>TimerViewModel</code>, <code>TimerContract</code>, <code>ActiveFocusSessionCard</code>) live together in <code>presentation/timer/</code>, making navigation and code review immediate.
+    </td>
+  </tr>
+</table>
+
+<!-- SECTION 3 -->
+<div class="page-break"></div>
+<h1>3. Architecture Paradigm: Clean Architecture + MVI</h1>
+
+<p>
+  FocusDesk implements a strict <strong>Model-View-Intent (MVI)</strong> pattern powered by Kotlin Coroutines and <code>StateFlow</code>. All ViewModels inherit from the base <code>MviViewModel&lt;I, S, E&gt;</code>:
+</p>
+
+<div class="arch-box">User Action (Click / Drag)
+       │
+       ▼
+1. Dispatch MviIntent (e.g. TimerIntent.ToggleTimer)
+       │
+       ▼
+2. handleIntent(intent) in ViewModel
+       │
+       ├─────────────────────────────────┐
+       ▼                                 ▼
+3. Execute UseCase                4. Pure Reducer setState { ... }
+   (TimerEngineUseCase.startTimer())     (MutableStateFlow.update)
+       │                                 │
+       ▼                                 ▼
+5. Repository updates Room DB     6. UI observes StateFlow
+   (RoomFocusRepository)             (collectAsStateWithLifecycle())
+       │                                 │
+       ▼                                 ▼
+7. Foreground Service Sync        8. Compose Recomposes Atomically
+   (DynamicIslandService updates chip)   (Canvas, Buttons, Text)
+       │
+       ▼
+9. One-Shot Effect Dispatched via Channel
+   (_effects.send(TimerEffect.PlayTickHaptic))</div>
+
+<h3>3.1 The MVI Contract Classes</h3>
+<ul>
+  <li><code>MviState</code>: Marker interface. Each screen has exactly one immutable data class representing 100% of its visual state (e.g. <code>TimerState</code>, <code>SettingsState</code>, <code>AnalyticsState</code>).</li>
+  <li><code>MviIntent</code>: Marker interface representing all possible user or system intentions (e.g. <code>TimerIntent.ToggleTimer</code>, <code>TimerIntent.AddFiveMinutes</code>, <code>TimerIntent.ConfirmReset</code>).</li>
+  <li><code>MviEffect</code>: Marker interface for one-off transient events consumed once by the UI (e.g. <code>ShowSnackbar</code>, <code>PlayCelebrationHaptic</code>, <code>PlaySoundEffect</code>). Backed by a buffered coroutine <code>Channel</code> to guarantee zero dropped events during screen rotations.</li>
+</ul>
+
+<!-- SECTION 4 -->
+<div class="page-break"></div>
+<h1>4. Domain Layer Deep Dive</h1>
+
+<h3>4.1 TimerEngineUseCase — Function Usages &amp; Call Chains</h3>
+<p>
+  Located in <code>shared/src/commonMain/kotlin/com/focusdesk/domain/usecase/TimerEngineUseCase.kt</code>. This is the central brain of FocusDesk.
+</p>
+
+<table>
+  <tr>
+    <th style="width: 28%;">Function Signature</th>
+    <th style="width: 32%;">Why It Is Called &amp; Call Chain</th>
+    <th style="width: 40%;">Parameters, Returns &amp; Concurrency Guards</th>
+  </tr>
+  <tr>
+    <td><code>observeSession(): Flow&lt;FocusSession&gt;</code></td>
+    <td>
+      Called by <code>TimerViewModel</code> and <code>DynamicIslandService</code> in their initialization scopes. Subscribes to real-time session updates.
+    </td>
+    <td>
+      <strong>Returns:</strong> Reactive <code>Flow&lt;FocusSession&gt;</code> from the repository.<br>
+      <strong>Threading:</strong> Emits on background or main thread safely.
+    </td>
+  </tr>
+  <tr>
+    <td><code>startTimer()</code></td>
+    <td>
+      Called when user taps the Play button on <code>TimerScreen</code>, <code>ActiveFocusSessionCard</code>, or the lock screen notification action.
+    </td>
+    <td>
+      Transitions status from <code>Idle</code> or <code>Paused</code> to <code>Running</code>. Sets <code>startedAtTimestamp</code> on first run. Resets <code>lastTickEpochMs</code>.
+    </td>
+  </tr>
+  <tr>
+    <td><code>pauseTimer()</code></td>
+    <td>
+      Called when user taps Pause button or receives phone call / lockscreen pause event.
+    </td>
+    <td>
+      Transitions status to <code>Paused</code>. Freezes countdown without modifying <code>remainingSeconds</code>.
+    </td>
+  </tr>
+  <tr>
+    <td><code>tick(force: Boolean = false): FocusSession</code></td>
+    <td>
+      <strong>CRITICAL CORE FUNCTION</strong>. Invoked once per second by the ViewModel's ticking coroutine loop. Decrements <code>remainingSeconds</code> by 1.
+    </td>
+    <td>
+      <div class="callout callout-warning" style="margin: 4px 0; padding: 6px 10px;">
+        <strong>850ms Debounce Guard:</strong> Uses <code>lastTickEpochMs</code> to enforce a minimum 850ms interval between ticks. This strictly prevents double-ticking if UI and Foreground Service tick simultaneously.
+      </div>
+      If timer reaches 0, transitions status to <code>Completed</code>, records session via <code>focusRepository.recordCompletedSession()</code>, and stops audio.
+    </td>
+  </tr>
+  <tr>
+    <td><code>resetTimer()</code></td>
+    <td>
+      Called after user confirms reset in <code>ExitConfirmationDialog</code>.
+    </td>
+    <td>
+      Fetches configured duration from <code>SettingsRepository</code> and resets remaining/target seconds. Sets status back to <code>Idle</code>.
+    </td>
+  </tr>
+  <tr>
+    <td><code>switchMode(mode: SessionMode)</code></td>
+    <td>
+      Called when user taps Work, Short Break, or Long Break mode tabs.
+    </td>
+    <td>
+      Loads corresponding duration from <code>UserSettings.intervals</code> and sets status to <code>Idle</code>.
+    </td>
+  </tr>
+  <tr>
+    <td><code>skipSession()</code></td>
+    <td>
+      Called when user clicks Skip button.
+    </td>
+    <td>
+      Calls private <code>determineNextMode()</code>: If currently in <code>Work</code> and <code>currentRound &gt;= totalRounds</code>, transitions to <code>LongBreak</code>; otherwise <code>ShortBreak</code>.
+    </td>
+  </tr>
+  <tr>
+    <td><code>startCustomSession(...)</code></td>
+    <td>
+      Called from the <code>NewSessionBottomSheet</code> or quick-start presets on <code>HomeScreen</code>.
+    </td>
+    <td>
+      Creates new <code>FocusSession</code> with custom title, category, mood, duration in minutes, and soundscape. Starts immediately in <code>Running</code> status.
+    </td>
+  </tr>
+  <tr>
+    <td><code>addSeconds(seconds: Long)</code></td>
+    <td>
+      Called when user taps the "+5 min" button during an active focus session.
+    </td>
+    <td>
+      Adds <code>300L</code> to both <code>remainingSeconds</code> and <code>targetDurationSeconds</code>, preserving the progress calculation accurately.
+    </td>
+  </tr>
+  <tr>
+    <td><code>endSessionEarly(): FocusSession</code></td>
+    <td>
+      Called when user confirms "End Session" in dialog or notification action.
+    </td>
+    <td>
+      Marks status as <code>Completed</code>, records session in Room, stops soundscape, and returns the completed session object.
+    </td>
+  </tr>
+  <tr>
+    <td><code>toggleAudioMute(...): Soundscape</code></td>
+    <td>
+      Called when user taps Mute/Unmute in UI or notification action.
+    </td>
+    <td>
+      If playing, saves active soundscape to settings and sets session to <code>None</code>. If muted, restores saved soundscape. Preserves user preference.
+    </td>
+  </tr>
+</table>
+
+<!-- SECTION 5 -->
+<div class="page-break"></div>
+<h1>5. Data Layer &amp; Offline-First Persistence Deep Dive</h1>
+
+<h3>5.1 Room Database (FocusDeskDatabase.kt)</h3>
+<p>
+  FocusDesk embeds an offline-first SQLite database built with AndroidX Room 2.6.1:
+</p>
+<ul>
+  <li><strong>Entities</strong>: <code>FocusSessionEntity</code>, <code>UserSettingsEntity</code>, <code>TaskEntity</code>.</li>
+  <li><strong>Database Prepopulation</strong>: Utilizes <code>RoomDatabase.Callback.onCreate()</code> to insert initial settings (ID = 1) and four starter tasks on first launch, ensuring the app is never in an uninitialized empty state.</li>
+</ul>
+
+<h3>5.2 Streak &amp; XP Gamification Algorithm (RoomFocusRepository.kt)</h3>
+<p>
+  When a focus session is recorded as completed, <code>RoomFocusRepository</code> executes an atomic transaction:
+</p>
+<pre><code>val nowMs = System.currentTimeMillis()
+val currentEpochDay = nowMs / (1000L * 60 * 60 * 24)
+
+val newStreak = when {
+    settings.lastActiveEpochDay == currentEpochDay -> settings.dayStreak.coerceAtLeast(1)
+    settings.lastActiveEpochDay == currentEpochDay - 1 -> settings.dayStreak + 1
+    else -> 1 // Gap detected: streak broken, reset to day 1
+}
+val bestStreak = maxOf(settings.bestStreak, newStreak)
+val sessionMinutes = ((session.targetDurationSeconds - session.remainingSeconds).coerceAtLeast(60L) / 60).toInt()
+val pointsEarned = maxOf(sessionMinutes, 6) // Base XP + duration bonus
+val newXp = settings.xp + pointsEarned
+val newLevel = (newXp / 100) + 1
+
+userSettingsDao.updateXpAndStreak(newXp, newLevel, newStreak, bestStreak, currentEpochDay)</code></pre>
+
+<h3>5.3 Weekly 7-Day Bucket Distribution Algorithm</h3>
+<p>
+  <code>observeProductivityStats()</code> uses Kotlin Coroutines <code>combine()</code> across sessions, tasks, and settings to build the 7-day Monday-to-Sunday bar chart in real-time:
+</p>
+<ul>
+  <li>Calculates Monday 00:00:00 timestamp using <code>Calendar.getInstance().apply { firstDayOfWeek = Calendar.MONDAY }</code>.</li>
+  <li>Allocates 7 buckets: <code>[0 = Monday, 1 = Tuesday, 2 = Wednesday, 3 = Thursday, 4 = Friday, 5 = Saturday, 6 = Sunday]</code>.</li>
+  <li>Iterates through sessions completed this week and accumulates <code>focusMinutes</code> and <code>sessionsCount</code> into the matching bucket.</li>
+</ul>
+
+<!-- SECTION 6 -->
+<div class="page-break"></div>
+<h1>6. Hardware, Sound Synthesis &amp; System Services Deep Dive</h1>
+
+<h3>6.1 Procedural Ambient Audio Synthesizer (AmbientAudioEngine)</h3>
+<p>
+  Located in <code>shared/src/androidMain/kotlin/com/focusdesk/core/platform/AndroidAudioPlayer.kt</code>.
+</p>
+<div class="callout callout-tip">
+  <strong>Why Procedural Synthesis?</strong>
+  Pre-recorded audio files consume 60+ MB of storage and suffer from audible loop seams. FocusDesk calculates audio samples mathematically in real-time at 44.1 kHz 16-bit PCM, producing seamless infinite soundscapes with a <strong>0 MB bundle size</strong>.
+</div>
+
+<table>
+  <tr>
+    <th style="width: 25%;">Soundscape</th>
+    <th>Synthesis Mathematical Model &amp; Implementation Details</th>
+  </tr>
+  <tr>
+    <td><strong>Rain &amp; Heavy Rain</strong></td>
+    <td>
+      1st-order IIR low-pass filtered white noise (<code>filterState = filterState * 0.94 + white * intensity</code>). A Poisson-distributed random drop generator inserts micro-sine bursts with randomized pitch (1,000–3,000 Hz) with exponential amplitude decay.
+    </td>
+  </tr>
+  <tr>
+    <td><strong>White, Pink, Brown Noise</strong></td>
+    <td>
+      Gaussian random walk generator (<code>random.nextGaussian() * 0.35</code>). Filter coefficients dictate the frequency slope:
+      <code>BrownNoise = 0.96</code> (-6 dB/octave warm deep rumble),
+      <code>PinkNoise = 0.92</code> (-3 dB/octave equal energy per octave),
+      <code>WhiteNoise = 0.86</code> (crisp uniform energy).
+    </td>
+  </tr>
+  <tr>
+    <td><strong>Coffee Shop &amp; Library</strong></td>
+    <td>
+      Dual low-frequency sinusoidal fundamentals at 65 Hz and 130 Hz simulate HVAC ventilation and background refrigerator hums, blended with stochastic filtered chatter noise.
+    </td>
+  </tr>
+  <tr>
+    <td><strong>Forest &amp; Birdsong</strong></td>
+    <td>
+      0.25 Hz sine envelope modulates background wind turbulence. A periodic 3-second cycle triggers multi-tone bird chirps peaking at 2,400 Hz with frequency modulation.
+    </td>
+  </tr>
+  <tr>
+    <td><strong>Ocean</strong></td>
+    <td>
+      0.10 Hz sinusoidal swell envelope modulates filtered surf noise, simulating rhythmic crashing ocean waves on a shoreline.
+    </td>
+  </tr>
+</table>
+
+<h3>6.2 Dynamic Island &amp; Foreground Service (DynamicIslandService)</h3>
+<p>
+  Located in <code>composeApp/src/main/kotlin/com/focusdesk/app/service/DynamicIslandService.kt</code>.
+</p>
+<ul>
+  <li><strong>Native Android Dynamic Island Integration</strong>: Modern Android firmware (OnePlus/Oppo ColorOS Aqua Dynamics, Xiaomi HyperOS, Samsung One UI Now Bar, Android 14/15) projects active <code>MediaSession</code> tokens with <code>Notification.MediaStyle</code> directly around the front camera punch-hole island.</li>
+  <li><strong>Dynamic Canvas Badge Rendering</strong>: <code>createTimerBadgeBitmap()</code> renders an off-screen 256x256 pixel circular progress ring with remaining MM:SS time in bold monospaced typography, battery-efficient dark background, and glowing progress arcs.</li>
+  <li><strong>Lockscreen Remote Controls</strong>: Dispatches broadcast intents to <code>DynamicIslandActionReceiver</code> to pause/resume, toggle mute, or terminate sessions directly from the lock screen.</li>
+</ul>
+
+<!-- SECTION 7 -->
+<div class="page-break"></div>
+<h1>7. Presentation &amp; UI Layer Deep Dive</h1>
+
+<h3>7.1 Single-Activity Coordinator (MainActivity.kt)</h3>
+<p>
+  <code>MainActivity</code> coordinates the entire screen graph with state-driven visibility:
+</p>
+<ul>
+  <li><strong>Full-Screen Timer</strong>: Rendered when <code>isSessionActive &amp;&amp; !isTimerScreenMinimized</code> with vertical slide transition.</li>
+  <li><strong>Minimized Docked Card</strong>: Rendered when <code>isSessionActive &amp;&amp; isTimerScreenMinimized</code>, docking <code>ActiveFocusSessionCard</code> above the bottom bar with playback and mute controls.</li>
+  <li><strong>Idle Inactivity Compression</strong>: If the screen is untouched for 8 seconds, <code>isBottomBarIdleCompressed</code> collapses the navigation bar. Any touch gesture instantly restores it.</li>
+</ul>
+
+<h3>7.2 The 5 Bespoke Theme Palettes (Color.kt)</h3>
+<table>
+  <tr>
+    <th>Palette Name</th>
+    <th>Primary Color</th>
+    <th>Accent / Glow</th>
+    <th>Dark Card BG</th>
+    <th>Aesthetic Mood</th>
+  </tr>
+  <tr>
+    <td><strong>Default Focus</strong></td>
+    <td>Forest Olive (<code>#4A683F</code>)</td>
+    <td>Lime Glow (<code>#D4F384</code>)</td>
+    <td>Deep Forest (<code>#16251C</code>)</td>
+    <td>Clean, modern organic focus</td>
+  </tr>
+  <tr>
+    <td><strong>Paper Studio</strong></td>
+    <td>Terracotta (<code>#8E532B</code>)</td>
+    <td>Amber (<code>#E5A169</code>)</td>
+    <td>Warm Espresso (<code>#291D16</code>)</td>
+    <td>Tactile warm craft paper</td>
+  </tr>
+  <tr>
+    <td><strong>Low Tide</strong></td>
+    <td>Sea Teal (<code>#2B5C56</code>)</td>
+    <td>Sage Mint (<code>#9EE0D4</code>)</td>
+    <td>Abyssal Teal (<code>#142927</code>)</td>
+    <td>Calm, aquatic serenity</td>
+  </tr>
+  <tr>
+    <td><strong>Last Light</strong></td>
+    <td>Rust Red (<code>#B55739</code>)</td>
+    <td>Peach Coral (<code>#F5AC95</code>)</td>
+    <td>Dark Coral (<code>#2C1D1A</code>)</td>
+    <td>Sunset warmth, deep immersion</td>
+  </tr>
+  <tr>
+    <td><strong>Night Bloom</strong></td>
+    <td>Deep Violet (<code>#5D4786</code>)</td>
+    <td>Soft Lilac (<code>#C0A6EB</code>)</td>
+    <td>Midnight Plum (<code>#211A2C</code>)</td>
+    <td>Nocturnal deep work focus</td>
+  </tr>
+</table>
+
+<!-- SECTION 8 -->
+<div class="page-break"></div>
+<h1>8. Dependency Injection Graph (Koin)</h1>
+<p>
+  FocusDesk uses <strong>Koin 4.0.2</strong> for clean, lightweight dependency injection across multiplatform and Android modules:
+</p>
+
+<div class="arch-box">sharedModule:
+  ├── domainModule
+  │     ├── single { TimerEngineUseCase(get(), get(), get()) }
+  │     ├── single { ManageTasksUseCase(get()) }
+  │     └── single { GetAnalyticsUseCase(get()) }
+  └── inMemoryDataModule (for Unit Tests &amp; iOS)
+        ├── single&lt;FocusRepository&gt; { InMemoryFocusRepository() }
+        ├── single&lt;TaskRepository&gt;  { InMemoryTaskRepository()  }
+        └── single&lt;SettingsRepository&gt; { InMemorySettingsRepository() }
+
+appModule (Android composeApp):
+  ├── single { FocusDeskDatabase.getInstance(androidContext()) }
+  ├── single { get&lt;FocusDeskDatabase&gt;().focusSessionDao() }
+  ├── single { get&lt;FocusDeskDatabase&gt;().userSettingsDao() }
+  ├── single { get&lt;FocusDeskDatabase&gt;().taskDao() }
+  ├── single&lt;FocusRepository&gt; { RoomFocusRepository(get(), get(), get()) }
+  ├── single&lt;SettingsRepository&gt; { RoomSettingsRepository(get()) }
+  ├── single&lt;TaskRepository&gt; { RoomTaskRepository(get()) }
+  ├── single { AmbientAudioEngine(get()) }
+  ├── viewModel { TimerViewModel(get(), get(), get()) }
+  ├── viewModel { AnalyticsViewModel(get()) }
+  └── viewModel { SettingsViewModel(get(), get()) }</div>
+
+<!-- SECTION 9 -->
+<h1>9. Next Developer Handbook: How-To Recipes &amp; Gotchas</h1>
+
+<h3>9.1 How to Add a New Soundscape in 3 Steps</h3>
+<ol>
+  <li>Open <code>UserSettings.kt</code> and add the enum entry: <code>Campfire("Campfire", isPremium = false, category = "Nature")</code>.</li>
+  <li>Open <code>AndroidAudioPlayer.kt</code> and implement the synthesis formula inside the <code>when (currentSoundscape)</code> loop.</li>
+  <li><strong>Finished!</strong> The soundscape immediately appears on the Sounds screen, bottom sheet, and quick-start cards.</li>
+</ol>
+
+<h3>9.2 Common Gotchas &amp; Solutions</h3>
+<div class="callout callout-warning">
+  <strong>Gotcha 1: Concurrency &amp; Fast Ticking</strong><br>
+  Never bypass the 850ms guard in <code>TimerEngineUseCase.tick()</code>. Multiple coroutines (ViewModel and Foreground Service) observe the session; without this guard, the timer could run at double speed.
+</div>
+<div class="callout callout-warning">
+  <strong>Gotcha 2: AudioTrack Main Thread Blocking</strong><br>
+  Never write audio samples to <code>AudioTrack</code> on the Android UI Main thread. Audio generation must always occur on the dedicated background daemon thread (<code>FocusDesk-AudioSynth</code>).
+</div>
+<div class="callout callout-tip">
+  <strong>Gotcha 3: Jetpack Compose State Lifecycles</strong><br>
+  Always use <code>collectAsStateWithLifecycle()</code> instead of <code>collectAsState()</code> to ensure Room database flows pause when the application is minimized, preserving battery life.
+</div>
+
+<div style="margin-top: 50px; text-align: center; color: #778473; font-size: 12px; border-top: 1px solid #e0e6db; padding-top: 16px;">
+  FocusDesk Developer Manual • Maintained by the Core Mobile Engineering Team • Apache 2.0
+</div>
+
+</body>
+</html>
